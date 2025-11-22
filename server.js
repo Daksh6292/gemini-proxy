@@ -16,23 +16,14 @@ app.post('/gemini', async (req, res) => {
     try {
         const userPrompt = req.body.prompt || "Jai Shree Ram";
 
-        const response = await axios.post(
-            `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-            {
-                contents: [
-                    {
-                        role: "user",
-                        parts: [{ text: userPrompt }]
-                    }
-                ],
-                generationConfig: {
-                    temperature: 0.9,
-                    maxOutputTokens: 100,
-                    topP: 0.95
-                }
-            },
-            { timeout: 15000 }
-        );
+       const response = await axios.post(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`,
+    {
+        contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+        generationConfig: { temperature: 0.9, maxOutputTokens: 100 }
+    },
+    { timeout: 15000 }
+);
 
         const reply = response.data.candidates[0].content.parts[0].text
             .replace(/```/g, '')
